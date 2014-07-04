@@ -300,10 +300,26 @@ class Controller:
 	def __init__(self, model):
 		self.model = model
 
+	def get_valid_moves(self, model):
+		moves = []
+		if model.is_valid_move_up():
+			moves.append('up')
+		if model.is_valid_move_down():
+			moves.append('down')
+		if model.is_valid_move_right():
+			moves.append('right')
+		if model.is_valid_move_left():
+			moves.append('left')
+		return moves
+
 	def move_up(self):
+		print '0'
 		if 'up' in self.get_valid_moves(self.model):
+			print '10'
 			self.model.update_up()
+			print '20'
 			self.model.generate_tile()
+			print '30'
 
 	def move_down(self):
 		if 'down' in self.get_valid_moves(self.model):

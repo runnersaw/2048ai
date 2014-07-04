@@ -115,14 +115,12 @@ def vsai(user, timer):
 def up(user):
 	#model update right
 	global users
-	global selfcontrollers
 	user=int(user)
 	print user
 	print users
 	if user > users:
 		return redirect('/')
 	print 'ayy'
-	print selfcontrollers[user]
 	selfcontrollers[user].move_up()
 	print 'moved'
 	return redirect('/self/'+str(user))
