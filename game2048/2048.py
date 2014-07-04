@@ -161,7 +161,7 @@ class Model:
 				new_list.append(list_of_numbers[i])
 			elif list_of_numbers[i]==list_of_numbers[i+1]:
 				new_list.append(list_of_numbers[i]*2)
-				new_list.extend(self.row_collapse_left_or_up(list_of_numbers[i+2:]))
+				new_list.extend(self.row_collapse_right_or_down(list_of_numbers[i+2:]))
 				break
 			else:
 				new_list.append(list_of_numbers[i])

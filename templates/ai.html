@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>2048 VS AI</title>
+	<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/stylesheet.css') }}"/>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+    <script src="{{ url_for('static', filename='js/aiscript.js') }}"></script>
+</head>
+<body>
+	<div id='header'>
+		<p id='time'>{{ time }}</p>
+		<p id='max_time'>{{ max_time }}</p>
+		<p id='user'>{{ user }}</p>
+		<a href='/ai/{{user}}'><div id='ai-link' class='header-link'>Watch</div></a>
+		<a href='/self/{{user}}'><div id='self-link' class='header-link'>Play</div></a>
+		<a href='/vs_ai/{{user}}/0'><div id='vs_ai-link' class='header-link'>Compete</div></a>
+		<p id='title'>2048 AI</p>
+		<a href='/about/{{user}}'><div id='about' class='header-link'>About</div></a>
+	</div>
+	<div id='options-container'>
+		<a href='/reset-ai/{{ user }}'><div class='options'>Reset</div></a>
+		<div id='speed-container'>
+			<div id='reset' class='options'>Set AI speed</div>
+			<a href='/ai-super-slow/{{user}}'><div class='options speed-set'><p class='inner-speed'>Super Slow<p></div></a>
+			<a href='/ai-slow/{{user}}'><div class='options speed-set'><p class='inner-speed'>Slow<p></div></a>
+			<a href='/ai-mid/{{user}}'><div class='options speed-set'><p class='inner-speed'>Mid<p></div></a>
+			<a href='/ai-slow/{{user}}'><div class='options speed-set'><p class='inner-speed'>Fast<p></div></a>
+			<a href='/ai-super-fast/{{user}}'><div class='options speed-set'><p class='inner-speed'>Super Fast<p></div></a>
+		</div>
+	</div>
+	<div id='game-container'>
+		{% for tile in all_possible_tiles %}
+			<div class='row{{ tile.row }} column{{ tile.column }} background-tile'></div>
+		{% endfor %}
+		{% for tile in aimodel.tiles %}
+			<div class='row{{ tile.row }} column{{ tile.column }} tile' style='background-color: {{tile.color}}'>{{ tile.value }}</div>
+		{% endfor %}
+	</div>
+</body>
+</html>

@@ -18,6 +18,7 @@ class Tile:
 		self.row = row
 		self.column = column
 		self.value = value
+		self.color = self.get_color_for_web()
 
 	def get_color(self):
 		color = (255,255,255)
@@ -43,6 +44,34 @@ class Tile:
 			color = (75,255,255)
 		if self.value == 4096:
 			color = (55,255,255)
+		return color
+
+	def get_color_for_web(self):
+		color = 'FFFFFF'
+		if self.value == 4:
+			color = '#DDDDFF'
+		if self.value == 8:
+			color = '#BBBBFF'
+		if self.value == 16:
+			color = '#9999FF'
+		if self.value == 32:
+			color = '#7777FF'
+		if self.value == 64:
+			color = '#5555FF'
+		if self.value == 128:
+			color = '#3333FF'
+		if self.value == 256:
+			color = '#1111FF'
+		if self.value == 512:
+			color = '#0000EE'
+		if self.value == 1024:
+			color = '#0000CC'
+		if self.value == 2048:
+			color = '#0000AA'
+		if self.value == 4096:
+			color = '#000088'
+		if self.value == 8192:
+			color = '#000066'
 		return color
 
 def convert_list_to_tiles(list_of_numbers):
@@ -151,7 +180,7 @@ class Model:
 		length = len(list_of_numbers)
 		for i in range(len(list_of_numbers)):
 			temp_list.append(list_of_numbers[length-i-1])
-		list_of_numbers = temp_list
+		list_of_numbers.reverse()
 		new_list = []
 		length = len(list_of_numbers)
 		if length==1:
@@ -335,6 +364,25 @@ class Controller:
 		                self.model.update_left()
 		                self.model.generate_tile()
 
+	def move_up(self):
+		if 'up' in self.get_valid_moves(self.model):
+			self.model.update_up()
+			self.model.generate_tile()
+
+	def move_down(self):
+		if 'down' in self.get_valid_moves(self.model):
+			self.model.update_down()
+			self.model.generate_tile()
+
+	def move_left(self):
+		if 'left' in self.get_valid_moves(self.model):
+			self.model.update_left()
+			self.model.generate_tile()
+
+	def move_right(self):
+		if 'right' in self.get_valid_moves(self.model):
+			self.model.update_right()
+			self.model.generate_tile()
 
 class AIcontroller:
 	def __init__(self, model):
