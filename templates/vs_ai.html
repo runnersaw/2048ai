@@ -21,10 +21,10 @@
 	<div id='games-container'>
 		<div id='human-game-container'>
 			{% for tile in all_possible_tiles %}
-				<div class='row{{ tile.row }} column{{ tile.column }} background-tile'></div>
+				<div class='row{{ tile.row }}vs column{{ tile.column }}vs background-tile-vs'></div>
 			{% endfor %}
 			{% for tile in model.tiles %}
-				<div class='row{{ tile.row }} column{{ tile.column }} tile' style='background-color: {{tile.color}}'>{{ tile.value }}</div>
+				<div class='row{{ tile.row }}vs column{{ tile.column }}vs tile-vs' style='background-color: {{tile.color}}'>{{ tile.value }}</div>
 			{% endfor %}
 		</div>
 		<div id='options-container-vs'>
@@ -40,10 +40,10 @@
 		</div>
 		<div id='ai-game-container'>
 			{% for tile in all_possible_tiles %}
-				<div class='row{{ tile.row }} column{{ tile.column }} background-tile'></div>
+				<div class='row{{ tile.row }}vs column{{ tile.column }}vs background-tile-vs'></div>
 			{% endfor %}
 			{% for tile in aimodel.tiles %}
-				<div class='row{{ tile.row }} column{{ tile.column }} tile' style='background-color: {{tile.color}}'>{{ tile.value }}</div>
+				<div class='row{{ tile.row }}vs column{{ tile.column }}vs tile-vs' style='background-color: {{tile.color}}'>{{ tile.value }}</div>
 			{% endfor %}
 		</div>
 	</div>

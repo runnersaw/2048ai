@@ -313,13 +313,9 @@ class Controller:
 		return moves
 
 	def move_up(self):
-		print '0'
 		if 'up' in self.get_valid_moves(self.model):
-			print '10'
 			self.model.update_up()
-			print '20'
 			self.model.generate_tile()
-			print '30'
 
 	def move_down(self):
 		if 'down' in self.get_valid_moves(self.model):

@@ -117,14 +117,9 @@ def up(user):
 	global users
 	global selfcontrollers
 	user=int(user)
-	print user
-	print users
 	if user > users:
 		return redirect('/')
-	print 'ayy'
-	print selfcontrollers[user]
 	selfcontrollers[user].move_up()
-	print 'moved'
 	return redirect('/self/'+str(user))
 
 @app.route('/self_human_move_right/<user>', methods = ['POST', 'GET'])
