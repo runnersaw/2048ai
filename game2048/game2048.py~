@@ -490,3 +490,34 @@ class AIcontroller:
 			return 'right'
 		if key1 == 'down' or key2 == 'down':
 			return 'down'
+
+if __name__ == '__main__':
+    pygame.init()
+    pygame.display.set_caption("2048 AI")
+    screen = pygame.display.set_mode(size)
+
+    x = convert_list_to_tiles([2,2,0,2,2,2,2,0,2,0,2,0,4,2,4])
+    model = Model() 
+    view = View(model, screen)
+    controller = AIcontroller(model)
+    view.draw()
+
+    if isinstance(controller, Controller):
+	    while True:
+	        for event in pygame.event.get():
+	            if  event.type == QUIT:
+	                pygame.quit()
+	                sys.exit()
+	            controller.handle_pygame_event(event)
+	            view.draw()
+	        pygame.display.update()
+
+    if isinstance(controller, AIcontroller):
+		while True:
+			for event in pygame.event.get():
+				if  event.type == QUIT:
+					pygame.quit()
+					sys.exit()
+			controller.move()
+			view.draw()
+			pygame.display.update()
