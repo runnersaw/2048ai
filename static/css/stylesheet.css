@@ -17,10 +17,6 @@
 	margin: 0;
 }
 
-#time {
-	display:none;
-}
-
 #user {
 	display:none;
 }
@@ -336,4 +332,8 @@ a {
 
 body {
 	overflow-x: hidden;
+}
+
+.clickable {
+	cursor: pointer;
 }
