@@ -246,7 +246,4 @@ def set_speed():
 	return jsonify({'speed':speeds[speed]})
 
 if __name__ == '__main__':
-	#app.secret_key = "\x0c\xf7jd\xc2\x19\x08\xd6\x81\x98U\xe4\x0f'Mw\xc2\xf3\xdbhJ\xee\\\xe3"
-	app.debug=True
-	app.run(debug=True)
-	app.add_url_rule('/favicon.ico', redirect_to=url_for('static', filename='favicon.ico'))
+	app.run()
