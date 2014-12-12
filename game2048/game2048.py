@@ -1,7 +1,7 @@
 '''
 2048 AI implementation 
 
-author: Sawyer and Chris
+author: Sawyer
 '''
 
 from random import randint, random

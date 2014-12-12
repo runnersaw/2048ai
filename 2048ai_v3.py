@@ -298,7 +298,7 @@ class View:
     	msgSurfaceObj = fontObj.render(msg, False, (0,0,0))
     	msgRectObj = self.screen.get_rect()
     	msgRectObj.topleft = pos
-    	screen.blit(msgSurfaceObj, msgRectObj)
+    	self.screen.blit(msgSurfaceObj, msgRectObj)
 
 class Controller:
 	def __init__(self, model):
@@ -360,11 +360,19 @@ class Controller:
 
 
 class AIcontroller:
-	def __init__(self, model):
+	def __init__(self, model, weights=None, elimination_weights=None):
 		self.model = model
+		if weights == None:
+			self.weights = {1:1, 2:.75, 3:.75, 4:.5}
+		else:
+			self.weights = weights
+		if elimination_weights == None:
+			self.e_weights = 100.0
+		else:
+			self.e_weights = elimination_weights
 
 	def move(self):
-		scoreWeights = {1:1.1, 2:1, 3:.5, 4:.2}
+		scoreWeights = self.weights
 		scores = {}
 		valid_directions = self.get_valid_moves(self.model)
 		for direction in valid_directions:
@@ -514,7 +522,7 @@ class AIcontroller:
 											if model.get_tile_from_position(2,3) != None:
 												if model.get_tile_from_position(2,4).value>=model.get_tile_from_position(2,3).value:
 													score += model.get_tile_from_position(2,3).value/18.0
-		k=self.model.get_max_tile()/100.0
+		k=self.model.get_max_tile()/self.e_weights
 		score -= k*len(model.tiles)
 		return score
 
@@ -543,34 +551,101 @@ class AIcontroller:
 		if key1 == 'down' or key2 == 'down':
 			return 'down'
 
-if __name__ == '__main__':
-    pygame.init()
-    pygame.display.set_caption("2048 AI")
-    screen = pygame.display.set_mode(size)
+def play_game():
+	global size
+	pygame.init()
+	pygame.display.set_caption("2048 AI")
+	screen = pygame.display.set_mode(size)
 
-    x = convert_list_to_tiles([2,2,0,2,2,2,2,0,2,0,2,0,4,2,4])
-    model = Model() 
-    view = View(model, screen)
-    controller = AIcontroller(model)
-    view.draw()
+	model = Model() 
+	view = View(model, screen)
+	controller = Controller(model)
+	view.draw()
 
-    if isinstance(controller, Controller):
-	    while True:
-	        for event in pygame.event.get():
-	            if  event.type == QUIT:
-	                pygame.quit()
-	                sys.exit()
-	            controller.handle_pygame_event(event)
-	            print controller.board_evaluation_function(model)
-	            view.draw()
-	        pygame.display.update()
-
-    if isinstance(controller, AIcontroller):
-		while True:
-			for event in pygame.event.get():
-				if  event.type == QUIT:
-					pygame.quit()
-					sys.exit()
-			controller.move()
+	while True:
+		for event in pygame.event.get():
+			if  event.type == QUIT:
+				pygame.quit()
+				sys.exit()
+			controller.handle_pygame_event(event)
 			view.draw()
-			pygame.display.update()
+		pygame.display.update()
+
+def simulate_game():
+	pygame.init()
+	pygame.display.set_caption("2048 AI")
+	screen = pygame.display.set_mode(size)
+
+	model = Model() 
+	view = View(model, screen)
+	controller = AIcontroller(model)
+	view.draw()
+
+	while True:
+		for event in pygame.event.get():
+			if  event.type == QUIT:
+				pygame.quit()
+				sys.exit()
+		controller.move()
+		view.draw()
+		pygame.display.update()
+
+def simulate_game_no_view(weights=None, ew=None):
+	model = Model()
+	controller = AIcontroller(model, weights, ew)
+
+	while True:
+		if model.get_max_tile() == 2048:
+			return True
+		if controller.get_valid_moves(model) == []:
+			return False
+		controller.move()
+
+def test_weights():
+	print range(2,5)
+	d={(1, 0.75, 0.25, 0.0): 16, (1, 0.5, 0.5, 0.0): 17, (1, 0.5, 0.75, 0.25): 22, (1, 0.5, 0.75, 0.0): 23, (1, 0.75, 0.75, 0.5): 28, (1, 0.75, 0.25, 0.5): 16, (1, 1.0, 0.25, 0.0): 19, (1, 0.75, 0.75, 0.0): 17, (1, 0.5, 0.25, 0.25): 18, (1, 0.75, 0.25, 0.25): 16, (1, 0.75, 0.5, 0.0): 17, (1, 0.75, 0.5, 0.25): 13, (1, 0.75, 0.75, 0.25): 20, (1, 1.0, 0.75, 0.5): 16, (1, 0.5, 0.25, 0.5): 20, (1, 0.5, 0.75, 0.5): 28, (1, 0.5, 0.5, 0.25): 23, (1, 0.75, 0.5, 0.5): 27, (1, 1.0, 0.75, 0.25): 25, (1, 1.0, 0.5, 0.25): 26, (1, 1.0, 0.25, 0.25): 18, (1, 1.0, 0.75, 0.0): 23, (1, 0.5, 0.25, 0.0): 22, (1, 1.0, 0.25, 0.5): 21, (1, 1.0, 0.5, 0.5): 26, (1, 0.5, 0.5, 0.5): 26, (1, 1.0, 0.5, 0.0): 15}
+	counts = []
+	for key in d:
+		count = d[key]
+		counts.append(count)
+	counts.sort()
+	counts.reverse()
+	for count in counts:
+		print count
+		for key in d:
+			if d[key] == count:
+				print key
+	for i in range(2,5):
+		for j in range(1,4):
+			for k in range(3):
+				count = 0
+				for l in range(50):
+					x = simulate_game_no_view({1:1, 2:(i/4.0), 3:(j/4.0), 4:(k/4.0)})
+					if x:
+						count += 1
+					print count
+				d2 = (1, i/4.0, j/4.0, k/4.0)
+				print d2
+				print count
+				d[d2]+=count
+				print d[d2]
+	print d
+
+def test_elimination_weights():
+	d = {}
+	l = [64.0,128.0,192.0,256.0,384.0,512.0,1024.0]
+	for i in l:
+		count = 0
+		for j in range(75):
+			x = simulate_game_no_view(ew=i)
+			if x:
+				count+=1
+			print count
+		d[i] = count
+		print d
+	print d
+
+
+if __name__ == '__main__':
+	test_elimination_weights()
+
